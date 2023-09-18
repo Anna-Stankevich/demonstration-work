@@ -1,0 +1,965 @@
+{
+	"info": {
+		"_postman_id": "6ed49528-da86-42ce-8644-612a833d5477",
+		"name": "Petstore",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "21017520",
+		"_collection_link": "https://www.postman.com/anna-stankevich/workspace/postman-api-testing-swagger-petstore/collection/21017520-6ed49528-da86-42ce-8644-612a833d5477?action=share&source=collection_link&creator=21017520"
+	},
+	"item": [
+		{
+			"name": "Pet",
+			"item": [
+				{
+					"name": "Get pet by status: available",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Body has text 'status'\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"status\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body has text 'available'\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"available\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body doesn't have text 'pending'\", function () {\r",
+									"    pm.expect(pm.response.text()).to.not.include(\"pending\")\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body doesn't have text 'sold'\", function () {\r",
+									"    pm.expect(pm.response.text()).to.not.include([\"sold\"])\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BaseURL}}/pet/findByStatus?status=available",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"pet",
+								"findByStatus"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "available"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get pet by status: pending & sold",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Body has text 'status'\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"status\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body has text 'pending'\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"pending\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body has text 'sold'\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"sold\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body doesn't have text 'available'\", function () {\r",
+									"    pm.expect(pm.response.text()).to.not.include(\"available\")\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BaseURL}}/pet/findByStatus?status=pending,sold",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"pet",
+								"findByStatus"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "pending,sold"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add new pet to the store",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"pm.collectionVariables.set(\"petId\", jsonData.id);\r",
+									"pm.collectionVariables.set(\"categoryId\", jsonData.category.id);\r",
+									"pm.collectionVariables.set(\"categoryName\", jsonData.category.name);\r",
+									"pm.collectionVariables.set(\"petName\", jsonData.name);\r",
+									"pm.collectionVariables.set(\"tagsId\", jsonData.tags[0].id);\r",
+									"pm.collectionVariables.set(\"tagsName\", jsonData.tags[0].name);\r",
+									"\r",
+									"pm.test(\"Body has pet object model: 'id'\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"id\");\r",
+									"});\r",
+									"pm.test(\"Body has pet object model: 'category'\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"category\");\r",
+									"});\r",
+									"pm.test(\"Body has pet object model: 'name'\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"name\");\r",
+									"});\r",
+									"pm.test(\"Body has pet object model: 'photoUrls'\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"photoUrls\");\r",
+									"});\r",
+									"pm.test(\"Body has pet object model: 'tags'\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"tags\");\r",
+									"});\r",
+									"pm.test(\"Body has pet object model: 'status'\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"status\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": 1420,\r\n  \"category\": {\r\n    \"id\": 1,\r\n    \"name\": \"cat\"\r\n  },\r\n  \"name\": \"Fluffy\",\r\n  \"photoUrls\": [\r\n    \"string\"\r\n    ],\r\n  \"tags\": [\r\n    {\r\n      \"id\": 2,\r\n      \"name\": \"persian\"\r\n  }\r\n  ],\r\n  \"status\": \"available\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseURL}}/pet",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"pet"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get 405 error without specifying required values",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"pm.test(\"Status code is 405\", function () {\r",
+									"    pm.response.to.have.status(405);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseURL}}/pet",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"pet"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get pet by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"\r",
+									"pm.test(\"The value of the variable 'petId' coincides to the saved current value\", function () {\r",
+									"    pm.expect(pm.collectionVariables.get(\"petId\")).to.equal(jsonData.id);\r",
+									"});\r",
+									"pm.test(\"The value of the variable 'categoryId' coincides to the saved current value\", function () {\r",
+									"    pm.expect(pm.collectionVariables.get(\"categoryId\")).to.equal(jsonData.category.id);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"The value of the variable 'categoryName' coincides to the saved current value\", function () {\r",
+									"    pm.expect(pm.collectionVariables.get(\"categoryName\")).to.equal(jsonData.category.name);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"The value of the variable 'petName' coincides to the saved current value\", function () {\r",
+									"    pm.expect(pm.collectionVariables.get(\"petName\")).to.equal(jsonData.name);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"The value of the variable 'tagsId' coincides to the saved current value\", function () {\r",
+									"    pm.expect(pm.collectionVariables.get(\"tagsId\")).to.equal(jsonData.tags[0].id);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"The value of the variable 'tagsName' coincides to the saved current value\", function () {\r",
+									"    pm.expect(pm.collectionVariables.get(\"tagsName\")).to.equal(jsonData.tags[0].name);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{BaseURL}}/pet/:petId",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"pet",
+								":petId"
+							],
+							"variable": [
+								{
+									"key": "petId",
+									"value": "{{petId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update pet",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Body has text 'status'\", function () {\r",
+									"    pm.expect(pm.response.text()).to.contain(\"status\",\"sold\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body has text 'sold'\", function () {\r",
+									"    pm.expect(pm.response.text()).to.contain(\"sold\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": {{petId}},\r\n  \"category\": {\r\n    \"id\": {{categoryId}},\r\n    \"name\": \"{{categoryName}}\"\r\n  },\r\n  \"name\": \"{{petName}}\",\r\n  \"photoUrls\": [\r\n    \"string\"\r\n  ],\r\n  \"tags\": [\r\n    {\r\n      \"id\": {{tagsId}},\r\n      \"name\": \"{{tagsName}}\"\r\n    }\r\n  ],\r\n  \"status\": \"sold\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseURL}}/pet",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"pet"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete a pet",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"\r",
+									"pm.test(\"The value of the variable 'petId' coincides to the saved current value\", function () {\r",
+									"    pm.expect(pm.collectionVariables.get(\"petId\").toString()).to.equal(jsonData.message);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "api_key",
+								"value": "special-key",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{BaseURL}}/pet/:petId",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"pet",
+								":petId"
+							],
+							"variable": [
+								{
+									"key": "petId",
+									"value": "{{petId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Store",
+			"item": [
+				{
+					"name": "Add new order",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"pm.collectionVariables.set(\"orderId\", jsonData.id);\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": 1630,\r\n  \"petId\": 1420,\r\n  \"quantity\": 1,\r\n  \"shipDate\": \"2023-03-21T13:17:28.451Z\",\r\n  \"status\": \"placed\",\r\n  \"complete\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseURL}}/store/order",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"store",
+								"order"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get order by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"\r",
+									"pm.test(\"The value of the variable 'orderId' coincides to the saved current value\", function () {\r",
+									"    pm.expect(pm.collectionVariables.get(\"orderId\")).to.equal(jsonData.id);\r",
+									"    });\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BaseURL}}/store/order/:orderId",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"store",
+								"order",
+								":orderId"
+							],
+							"variable": [
+								{
+									"key": "orderId",
+									"value": "{{orderId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get 400 error when order by invalid value ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"\r",
+									"pm.test(\"The value of the variable 'orderId' coincides to the  invalid current value\", function () {\r",
+									"    pm.expect(pm.collectionVariables.get(\"фапррр\")).to.equal(jsonData.id);\r",
+									"    });\r",
+									"\r",
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BaseURL}}/store/order/:orderId",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"store",
+								"order",
+								":orderId"
+							],
+							"variable": [
+								{
+									"key": "orderId",
+									"value": "фапррр"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete order",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"\r",
+									"pm.test(\"The value of the variable 'orderId' coincides to the saved current value\", function () {\r",
+									"    pm.expect(pm.collectionVariables.get(\"orderId\").toString()).to.equal(jsonData.message);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{BaseURL}}/store/order/:orderId",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"store",
+								"order",
+								":orderId"
+							],
+							"variable": [
+								{
+									"key": "orderId",
+									"value": "{{orderId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Create user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": 1600,\r\n  \"username\": \"Stas\",\r\n  \"firstName\": \"Stas\",\r\n  \"lastName\": \"Petrenko\",\r\n  \"email\": \"StasPetrenko@mail.com\",\r\n  \"password\": \"1234567\",\r\n  \"phone\": \"89101234567\",\r\n  \"userStatus\": 0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseURL}}/user",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create users (arrey)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n        \"id\": 1601,\r\n        \"username\": \"Maria\",\r\n        \"firstName\": \"Maria\",\r\n        \"lastName\": \"Kazlova\",\r\n        \"email\": \"MariaKazlova@mail.com\",\r\n        \"password\": \"1\",\r\n        \"phone\": \"89101234578\",\r\n        \"userStatus\": 0\r\n    },\r\n    {\r\n        \"id\": 1602,\r\n        \"username\": \"Pyotr\",\r\n        \"firstName\": \"Pyotr\",\r\n        \"lastName\": \"Barsukov\",\r\n        \"email\": \"PyotrBarsukov@mail.com\",\r\n        \"password\": \"321\",\r\n        \"phone\": \"89101234589\",\r\n        \"userStatus\": 0\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseURL}}/user/createWithArray",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"user",
+								"createWithArray"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get user by user name",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"\r",
+									"pm.collectionVariables.set(\"userId\", jsonData.id);\r",
+									"pm.collectionVariables.set(\"user\", jsonData.username);\r",
+									"pm.collectionVariables.set(\"firstName\", jsonData.firstName);\r",
+									"pm.collectionVariables.set(\"lastName\", jsonData.lastName);\r",
+									"pm.collectionVariables.set(\"email\", jsonData.email);\r",
+									"pm.collectionVariables.set(\"password\", jsonData.password);\r",
+									"pm.collectionVariables.set(\"phone\", jsonData.phone);\r",
+									"pm.collectionVariables.set(\"userStatus\", jsonData.userStatus);\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BaseURL}}/user/:userName",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"user",
+								":userName"
+							],
+							"variable": [
+								{
+									"key": "userName",
+									"value": "{{userName}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": {{userId}},\r\n  \"username\": \"{{user}}\",\r\n  \"firstName\": \"{{firstName}}\",\r\n  \"lastName\": \"{{lastName}}\",\r\n  \"email\": \"{{email}}\",\r\n  \"password\": \"123456788\",\r\n  \"phone\": \"{{phone}}\",\r\n  \"userStatus\": {{userStatus}}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseURL}}/user/:username",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"user",
+								":username"
+							],
+							"variable": [
+								{
+									"key": "username",
+									"value": "Stas"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Logs users into the system",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BaseURL}}/user/login?username=Maria&password=1",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"user",
+								"login"
+							],
+							"query": [
+								{
+									"key": "username",
+									"value": "Maria"
+								},
+								{
+									"key": "password",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get 400 error   by incorrect password",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BaseURL}}/user/login?username=Maria&password=1234",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"user",
+								"login"
+							],
+							"query": [
+								{
+									"key": "username",
+									"value": "Maria"
+								},
+								{
+									"key": "password",
+									"value": "1234"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{BaseURL}}/user/:userName",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"user",
+								":userName"
+							],
+							"variable": [
+								{
+									"key": "userName",
+									"value": "{{userName}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "BaseURL",
+			"value": "https://petstore.swagger.io/v2"
+		},
+		{
+			"key": "userName",
+			"value": "Stas"
+		},
+		{
+			"key": "petId",
+			"value": ""
+		},
+		{
+			"key": "categoryId",
+			"value": ""
+		},
+		{
+			"key": "categoryName",
+			"value": ""
+		},
+		{
+			"key": "petName",
+			"value": ""
+		},
+		{
+			"key": "tagsId",
+			"value": ""
+		},
+		{
+			"key": "tagsName",
+			"value": ""
+		},
+		{
+			"key": "orderId",
+			"value": ""
+		},
+		{
+			"key": "userId",
+			"value": ""
+		},
+		{
+			"key": "user",
+			"value": ""
+		},
+		{
+			"key": "firstName",
+			"value": ""
+		},
+		{
+			"key": "lastName",
+			"value": ""
+		},
+		{
+			"key": "email",
+			"value": ""
+		},
+		{
+			"key": "password",
+			"value": ""
+		},
+		{
+			"key": "phone",
+			"value": ""
+		},
+		{
+			"key": "userStatus",
+			"value": ""
+		}
+	]
+}
